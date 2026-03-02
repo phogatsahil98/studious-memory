@@ -1,6 +1,8 @@
 import java.util.HashMap;
 import java.util.Map;
 
+//! Highest Value among all Values
+/*
 public class Day7 {
 
     public static void main(String[] args) {
@@ -57,5 +59,67 @@ public class Day7 {
 
         System.out.println("\nMaximum Frequency Count is : " + maxFreq);
         System.out.println("Element with Maximum Frequency is : " + maxFreqValue);
+    }
+}
+*/
+
+//! Second-Highest Value
+
+class Day7 {
+    // Function to find second most frequent element
+    public static int secondMostFrequentElement(int[] nums) {
+
+        // If array has less than 2 elements
+        if (nums.length < 2) {
+            return -1;
+        }
+
+        // Step 1: Build frequency map
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        // Step 2: Find highest and second highest frequency
+        int firstMax = 0;
+        int secondMax = 0;
+
+        for (int freq : map.values()) {
+
+            if (freq > firstMax) {
+                secondMax = firstMax;
+                firstMax = freq;
+            }
+            else if (freq > secondMax && freq < firstMax) {
+                secondMax = freq;
+            }
+        }
+
+        // If second highest doesn't exist
+        if (secondMax == 0) {
+            return -1;
+        }
+
+        // Step 3: Find smallest element having secondMax frequency
+        int result = Integer.MAX_VALUE;
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == secondMax) {
+                result = Math.min(result, entry.getKey());
+            }
+        }
+
+        return result;
+    }
+
+    // Main Method
+    public static void main(String[] args) {
+
+        int[] arr = {4,4,5,5,6,7};
+
+        int answer = secondMostFrequentElement(arr);
+
+        System.out.println("Second Most Frequent Element: " + answer);
     }
 }
